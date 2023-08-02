@@ -39,8 +39,9 @@ func main () {
 	}
 
 	// fmt.Println("프로포절 아이디 제대로 들어오나요",os.Getenv("XplaProposalID"), os.Getenv("XplaStatus"))
-
-	ticker := time.NewTicker(2 * time.Second)
+	ticker := time.NewTicker(12 * time.Hour)
+	// ticker := time.NewTicker(2 * time.Second)
+	fmt.Printf("%s BOT is running.\n", time.Now().Format("2006-01-02 15:04:05"))
 	defer ticker.Stop()
 
 	for range ticker.C{
