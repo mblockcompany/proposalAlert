@@ -12,9 +12,9 @@ func MediProposalMessage(proposal Proposal) string {
 	endTime, _ := time.Parse(time.RFC3339, e1)
 
 	return fmt.Sprintf(`[New proposal on MediBloc]
-제안 개요 : %v
+제안 개요 : #%s. %v
 투표 기간 : %s ~ %s
-투표페이지 : https://www.mintscan.io/medibloc/proposals/%s`, proposal.Content.Title, startTime.Format("2006-01-02 15:04"), endTime.Format("2006-01-02 15:04"),proposal.ID)
+투표페이지 : https://www.mintscan.io/medibloc/proposals/%s`, proposal.ID, proposal.Content.Title, startTime.Format("2006-01-02 15:04"), endTime.Format("2006-01-02 15:04"),proposal.ID)
 }
 
 func XplaProposalMessage(proposal Proposal) string {
@@ -24,7 +24,7 @@ func XplaProposalMessage(proposal Proposal) string {
 	endTime, _ := time.Parse(time.RFC3339, e1)
 
 	return fmt.Sprintf(`[New proposal on XPLA]
-제안 개요 : %v
+제안 개요 : #%s. %v
 투표 기간 : %s ~ %s
-투표페이지 : https://www.mintscan.io/xpla/proposals/%s`, proposal.Content.Title, startTime.Format("2006-01-02 15:04"), endTime.Format("2006-01-02 15:04"),proposal.ID)
+투표페이지 : https://www.mintscan.io/xpla/proposals/%s`, proposal.ID, proposal.Content.Title, startTime.Format("2006-01-02 15:04"), endTime.Format("2006-01-02 15:04"),proposal.ID)
 }
