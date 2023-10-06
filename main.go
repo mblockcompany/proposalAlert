@@ -9,10 +9,18 @@ import (
 )
 
 func main () {
-	// ticker := time.NewTicker(1 * time.Hour)
+	ticker := time.NewTicker(3 * time.Second)
 	// ticker := time.NewTicker(30 * time.Minute)
-	ticker := time.NewTicker(2 * time.Second)
+	// ticker := time.NewTicker(2 * time.Second)
 	fmt.Printf("%s BOT is running.\n", time.Now().Format("2006-01-02 15:04:05"))
+	initMedi := request.GetHTTPResponse("https://api.gopanacea.org/gov/proposals")
+	initXpla := request.GetHTTPResponse("https://dimension-lcd.xpla.dev/gov/proposals")
+	os.Setenv("initMediProposalID", initMedi.ID)
+	os.Setenv("initXplaProposalID", initXpla.ID)
+	initMediID := os.Getenv("initMediProposalID")
+	initXplaID := os.Getenv("initXplaProposalID")
+	fmt.Printf("Init ProposalID of Medibloc %s \n",initMediID)
+	fmt.Printf("Init ProposalID of XPLA %s \n",initXplaID)
 	defer ticker.Stop()
 
 	for range ticker.C{
@@ -35,24 +43,24 @@ func main () {
 		strXpla := strconv.Itoa(CurrXpla.Status)
 		os.Setenv("XplaStatus", strXpla)
 		
-		PrevMediID := os.Getenv("MediProposalID")
-		PrevXplaID := os.Getenv("XplaProposalID")
+		// PrevMediID := os.Getenv("MediProposalID")
+		// PrevXplaID := os.Getenv("XplaProposalID")
 		mediMsg := request.MediProposalMessage(CurrMedi)
 		xplaMsg := request.XplaProposalMessage(CurrXpla)
 		currTime := time.Now().Format("01-02 15:04:05")
 		
-		fmt.Printf("PrevMediID:%v, CurrMediID:%v, PrevXplaID:%v , CurrXplaID:%v \n",PrevMediID,CurrMedi.ID, PrevXplaID, CurrXpla.ID)
-		if CurrMedi.ID != PrevMediID && mediStatus == "2" {
+		fmt.Printf("PrevMediID:%v, CurrMediID:%v, PrevXplaID:%v , CurrXplaID:%v \n",initMediID,CurrMedi.ID, initXplaID, CurrXpla.ID)
+		if CurrMedi.ID != initMediID && mediStatus == "2" {
 			request.SendSlackMsg(mediMsg)
-			os.Setenv("MediProposalID", CurrMedi.ID)
-			fmt.Printf("[New Proposal on Medibloc] #%v -> #%v\n", PrevMediID, CurrMedi.ID)
+			os.Setenv("initMediProposalID", CurrMedi.ID)
+			fmt.Printf("[New Proposal on Medibloc] #%v -> #%v\n", initMediID, CurrMedi.ID)
 		} else {
 			fmt.Printf("[%s] MediBloc govBot is Working.\n",currTime )
 		}
-		if CurrXpla.ID != PrevXplaID && strXpla == "2" {
+		if CurrXpla.ID != initXplaID && strXpla == "2" {
 			request.SendSlackMsg(xplaMsg)
-			os.Setenv("XplaProposalID", CurrXpla.ID)
-			fmt.Printf("[New Proposal on XPLA] #%v -> #%v\n", PrevXplaID, CurrXpla.ID)
+			os.Setenv("initXplaProposalID", CurrXpla.ID)
+			fmt.Printf("[New Proposal on XPLA] #%v -> #%v\n", initXplaID, CurrXpla.ID)
 		} else {
 			fmt.Printf("[%s] XPLA govBot is Working.\n",currTime )
 		}
