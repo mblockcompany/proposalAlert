@@ -50,16 +50,17 @@ func main () {
 		currTime := time.Now().Format("01-02 15:04:05")
 		
 		fmt.Printf("PrevMediID:%v, CurrMediID:%v, PrevXplaID:%v , CurrXplaID:%v \n",initMediID,CurrMedi.ID, initXplaID, CurrXpla.ID)
+		fmt.Printf("mediStatus: %v", mediStatus)
 		if CurrMedi.ID != initMediID && mediStatus == "2" {
 			request.SendSlackMsg(mediMsg)
-			os.Setenv("initMediProposalID", CurrMedi.ID)
+			initMediID = CurrMedi.ID
 			fmt.Printf("[New Proposal on Medibloc] #%v -> #%v\n", initMediID, CurrMedi.ID)
 		} else {
 			fmt.Printf("[%s] MediBloc govBot is Working.\n",currTime )
 		}
 		if CurrXpla.ID != initXplaID && strXpla == "2" {
 			request.SendSlackMsg(xplaMsg)
-			os.Setenv("initXplaProposalID", CurrXpla.ID)
+			initXplaID = CurrXpla.ID
 			fmt.Printf("[New Proposal on XPLA] #%v -> #%v\n", initXplaID, CurrXpla.ID)
 		} else {
 			fmt.Printf("[%s] XPLA govBot is Working.\n",currTime )
